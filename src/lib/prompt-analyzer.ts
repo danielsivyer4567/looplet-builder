@@ -78,13 +78,36 @@ Be comprehensive and practical. Return ONLY valid JSON, no markdown.`;
       jsonStr = jsonMatch[0];
     }
 
+    // Clean up common JSON issues from LLM output
+    jsonStr = jsonStr
+      .replace(/,(\s*[}\]])/g, '$1')  // Remove trailing commas
+      .replace(/[\u0000-\u001F]+/g, ' ')  // Remove control characters
+      .replace(/\n\s*\n/g, '\n');  // Remove excessive newlines
+
     try {
       const parsed = JSON.parse(jsonStr);
       return RequirementsSchema.parse(parsed);
     } catch (error) {
       console.error("Failed to parse requirements:", error);
-      console.error("Raw response:", content.text);
-      throw new Error("Failed to parse app requirements from prompt");
+      console.error("Raw response (first 500 chars):", content.text.substring(0, 500));
+
+      // Return a sensible default based on the prompt
+      return {
+        appType: "web" as const,
+        name: "GeneratedApp",
+        description: prompt.substring(0, 100),
+        features: ["Basic functionality"],
+        authentication: prompt.toLowerCase().includes("auth") || prompt.toLowerCase().includes("login"),
+        database: prompt.toLowerCase().includes("data") || prompt.toLowerCase().includes("store"),
+        api: true,
+        realtime: false,
+        payments: prompt.toLowerCase().includes("payment") || prompt.toLowerCase().includes("checkout"),
+        techStack: { framework: "nextjs", styling: "tailwind" },
+        complexity: "medium" as const,
+        estimatedCredits: 5,
+        pages: ["/", "/dashboard"],
+        components: ["Header", "Main", "Footer"],
+      };
     }
   }
 }

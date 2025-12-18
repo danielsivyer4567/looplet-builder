@@ -81,11 +81,39 @@ Return ONLY valid JSON, no markdown code blocks.`;
       jsonStr = jsonMatch[0];
     }
 
+    // Clean up common JSON issues from LLM output
+    jsonStr = jsonStr
+      .replace(/,(\s*[}\]])/g, '$1')  // Remove trailing commas
+      .replace(/[\u0000-\u001F]+/g, ' ')  // Remove control characters
+      .replace(/\n\s*\n/g, '\n');  // Remove excessive newlines
+
     try {
       return JSON.parse(jsonStr) as Architecture;
     } catch (error) {
       console.error("Failed to parse architecture:", error);
-      throw new Error("Failed to parse architecture plan");
+      console.error("Raw JSON (first 500 chars):", jsonStr.substring(0, 500));
+
+      // Try to return a minimal valid architecture as fallback
+      return {
+        fileStructure: [
+          { name: "src", path: "src", type: "directory", children: [
+            { name: "app", path: "src/app", type: "directory", children: [
+              { name: "page.tsx", path: "src/app/page.tsx", type: "file" },
+              { name: "layout.tsx", path: "src/app/layout.tsx", type: "file" },
+              { name: "globals.css", path: "src/app/globals.css", type: "file" },
+            ]},
+            { name: "components", path: "src/components", type: "directory", children: [] },
+          ]},
+        ],
+        components: [],
+        routes: [{ path: "/", type: "page", description: "Main page", authentication: false }],
+        dependencies: {
+          "next": "^14.0.0",
+          "react": "^18.2.0",
+          "react-dom": "^18.2.0",
+          "tailwindcss": "^3.4.0",
+        }
+      };
     }
   }
 }
