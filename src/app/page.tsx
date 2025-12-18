@@ -3,135 +3,153 @@ import { Sparkles, Zap, Code2, Rocket, Shield, Download } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[hsl(222.2,84%,4.9%)]">
-      {/* Floating background orbs */}
+    <div className="min-h-screen bg-mesh relative overflow-hidden">
+      {/* Dynamic Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "4s" }} />
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] animate-float" />
+        <div className="absolute top-[20%] -right-[5%] w-[35%] h-[35%] bg-purple-600/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: "2s" }} />
+        <div className="absolute -bottom-[10%] left-[20%] w-[40%] h-[40%] bg-pink-600/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: "4s" }} />
+        <div className="absolute top-[40%] left-[40%] w-[30%] h-[30%] bg-indigo-600/10 rounded-full blur-[100px] animate-pulse" />
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
-            <Sparkles className="w-5 h-5 text-white" />
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between glass-morphism px-6 py-3 rounded-2xl">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-lg shadow-blue-500/20 animate-pulse-glow">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white text-shadow-glow">Looplet Builder</span>
           </div>
-          <span className="text-xl font-bold text-white">Looplet Builder</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
-          <a href="#demo" className="text-gray-400 hover:text-white transition-colors">Demo</a>
-          <button className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors">
-            Get Started
-          </button>
+          <div className="flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#features" className="text-sm font-medium text-gray-300 hover:text-white transition-all hover:scale-105">Features</a>
+              <a href="#demo" className="text-sm font-medium text-gray-300 hover:text-white transition-all hover:scale-105">Demo</a>
+            </div>
+            <button className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-all border border-white/10 hover:border-white/20 active:scale-95">
+              Get Started
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 px-6 pt-20 pb-16 max-w-7xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8">
-          <Zap className="w-4 h-4 text-blue-400" />
-          <span className="text-sm text-blue-400">AI-Powered App Generation</span>
+      <section className="relative z-10 px-6 pt-40 pb-20 max-w-7xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-10 border border-white/5 animate-fadeIn">
+          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+          <span className="text-xs font-semibold tracking-wider uppercase text-blue-400/90">AI-Powered App Generation</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-bold mb-6">
-          <span className="text-white">From Prompt to</span>
+        <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter animate-fadeIn">
+          <span className="text-white drop-shadow-2xl">From Prompt to</span>
           <br />
-          <span className="gradient-text">Deployed App</span>
+          <span className="gradient-text drop-shadow-2xl">Deployed App</span>
         </h1>
 
-        <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-12">
-          Describe your app in plain English. Our AI builds it, validates it, and deploys it.
-          Get a production-ready application in minutes, not months.
+        <p className="text-xl md:text-2xl text-gray-400/90 max-w-3xl mx-auto mb-16 leading-relaxed font-light animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+          Describe your vision in plain English. Our neural engine builds, 
+          validates, and deploys your application in a high-performance cloud environment.
         </p>
 
-        {/* Stats */}
-        <div className="flex justify-center gap-12 mb-16">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">5 min</div>
-            <div className="text-sm text-gray-500">Avg. Build Time</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">100%</div>
-            <div className="text-sm text-gray-500">Code Ownership</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">Next.js</div>
-            <div className="text-sm text-gray-500">Modern Stack</div>
+        {/* Hero Stats */}
+        <div className="grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto mb-20 animate-fadeIn" style={{ animationDelay: "0.4s" }}>
+          <StatCard label="Avg. Build Time" value="5 min" />
+          <StatCard label="Code Ownership" value="100%" />
+          <StatCard label="Modern Stack" value="Next.js" />
+        </div>
+      </section>
+
+      {/* Prompt Builder Area */}
+      <section id="demo" className="relative z-10 px-6 pb-32 max-w-5xl mx-auto animate-fadeIn" style={{ animationDelay: "0.6s" }}>
+        <div className="p-1 rounded-[32px] bg-gradient-to-b from-white/10 to-transparent">
+          <div className="glass-morphism rounded-[31px] overflow-hidden">
+            <PromptBuilder />
           </div>
         </div>
       </section>
 
-      {/* Prompt Builder */}
-      <section id="demo" className="relative z-10 px-6 pb-20 max-w-4xl mx-auto">
-        <PromptBuilder />
-      </section>
+      {/* Features Grid */}
+      <section id="features" className="relative z-10 px-6 py-32 max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Engineered for Performance
+          </h2>
+          <div className="h-1.5 w-24 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full" />
+        </div>
 
-      {/* Features */}
-      <section id="features" className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">
-          Everything You Need
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
           <FeatureCard
             icon={<Sparkles className="w-6 h-6" />}
             title="AI-Powered Generation"
-            description="Claude and GPT-4 analyze your requirements and generate production-ready code."
+            description="Claude and GPT-4 analyze your requirements and generate production-ready code with extreme precision."
           />
           <FeatureCard
             icon={<Code2 className="w-6 h-6" />}
-            title="Full-Stack Ready"
-            description="Next.js 15, React 19, TypeScript, Tailwind CSS. Modern stack out of the box."
+            title="Enterprise Stack"
+            description="Next.js 15, React 19, and Tailwind CSS v4. The bleeding edge of web development, automated."
           />
           <FeatureCard
             icon={<Rocket className="w-6 h-6" />}
             title="Instant Deployment"
-            description="One-click deploy to Vercel. Your app goes live in seconds."
+            description="Seamless integration with cloud providers. Your application goes from concept to live URL in seconds."
           />
           <FeatureCard
             icon={<Shield className="w-6 h-6" />}
-            title="Validated & Secure"
-            description="Every generated app passes TypeScript checks and security scans."
+            title="Strict Validation"
+            description="Every line of code undergoes automated TypeScript verification and security auditing before delivery."
           />
           <FeatureCard
             icon={<Download className="w-6 h-6" />}
-            title="Full Code Access"
-            description="Download the complete source code. No lock-in, no hidden files."
+            title="Zero Lock-in"
+            description="Export your entire repository anytime. Clean, documented code that you own entirely."
           />
           <FeatureCard
             icon={<Zap className="w-6 h-6" />}
-            title="Construction Focus"
-            description="Built for tradies. Job tracking, quotes, scheduling templates ready."
+            title="Industry Optimized"
+            description="Pre-configured templates for construction, service industries, and professional workflows."
           />
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 px-6 py-8 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-blue-500" />
-            <span className="text-gray-400">Looplet Builder</span>
+      <footer className="relative z-10 px-6 py-12 glass border-t border-white/5 mt-20">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+              <Sparkles className="w-5 h-5 text-blue-400" />
+            </div>
+            <span className="text-xl font-bold text-white">Looplet Builder</span>
           </div>
-          <p className="text-gray-500 text-sm">
-            Built for the construction industry
+          <p className="text-gray-500 text-sm font-medium">
+            © 2025 Looplet AI Systems. All rights reserved.
           </p>
+          <div className="flex gap-6">
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
+          </div>
         </div>
       </footer>
     </div>
   );
 }
 
+function StatCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="glass-card p-6 border border-white/5 hover:border-white/10 transition-all group">
+      <div className="text-3xl font-black text-white mb-1 group-hover:gradient-text transition-all">{value}</div>
+      <div className="text-sm font-medium text-gray-500 tracking-wide uppercase">{label}</div>
+    </div>
+  );
+}
+
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
-    <div className="glass rounded-xl p-6 hover-glow">
-      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center text-blue-400 mb-4">
+    <div className="glass-card p-8 hover-glow group border border-white/5">
+      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform border border-white/5">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-      <p className="text-gray-400 text-sm">{description}</p>
+      <h3 className="text-xl font-bold text-white mb-4">{title}</h3>
+      <p className="text-gray-400 leading-relaxed font-light">{description}</p>
     </div>
   );
 }
