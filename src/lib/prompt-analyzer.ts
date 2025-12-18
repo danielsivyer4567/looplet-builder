@@ -55,7 +55,7 @@ Return a JSON object with these exact fields:
 Be comprehensive and practical. Return ONLY valid JSON, no markdown.`;
 
     const response = await this.anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-5-20251101",
       max_tokens: 2000,
       messages: [
         {
