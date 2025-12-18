@@ -1,0 +1,13 @@
+name = "looplet-builder"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Pages configuration
+pages_build_output_dir = ".vercel/output/static"
+
+[vars]
+ENVIRONMENT = "production"
+
+# For Workers (if using Workers instead of Pages)
+# main = ".worker-next/index.mjs"
+# assets = { directory = ".worker-next/assets" }
