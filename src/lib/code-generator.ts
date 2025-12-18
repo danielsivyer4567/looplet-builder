@@ -70,7 +70,7 @@ Requirements:
 Return ONLY the component code, no explanations or markdown.`;
 
     const response = await this.anthropic.messages.create({
-      model: "claude-opus-4-5-20251101",
+      model: "claude-sonnet-4-20250514", // Sonnet for bulk code generation
       max_tokens: 2000,
       messages: [{ role: "user", content: prompt }],
       system: "You are an expert React/Next.js developer. Return only clean TypeScript code.",
@@ -125,7 +125,7 @@ Requirements:
 Return ONLY the code, no explanations.`;
 
     const response = await this.anthropic.messages.create({
-      model: "claude-opus-4-5-20251101",
+      model: "claude-sonnet-4-20250514", // Sonnet for bulk code generation
       max_tokens: 2000,
       messages: [{ role: "user", content: prompt }],
       system: "You are an expert Next.js developer. Return only clean TypeScript code.",
