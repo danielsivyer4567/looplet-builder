@@ -21,7 +21,7 @@ export function validateApiKey(request: NextRequest): AuthResult {
   const apiKeyHeader = request.headers.get("x-api-key");
 
   // Check for API key in environment (for simple auth)
-  const validApiKey = process.env.LOOPLET_API_KEY;
+  const validApiKey = process.env.AUT0_API_KEY;
 
   // If no API key is configured, allow all requests (development mode)
   if (!validApiKey) {

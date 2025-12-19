@@ -19,7 +19,7 @@ export default function Home() {
             <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-lg shadow-blue-500/20 animate-pulse-glow">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white text-shadow-glow">Looplet Builder</span>
+            <span className="text-xl font-bold tracking-tight text-white text-shadow-glow">Aut0 Pilot</span>
           </div>
           <div className="flex items-center gap-8">
             <div className="hidden md:flex items-center gap-8">
@@ -121,14 +121,14 @@ export default function Home() {
             <div className="p-2 rounded-lg bg-white/5 border border-white/10">
               <Sparkles className="w-5 h-5 text-blue-400" />
             </div>
-            <span className="text-xl font-bold text-white">Looplet Builder</span>
+            <span className="text-xl font-bold text-white">Aut0 Pilot</span>
           </div>
           <p className="text-gray-500 text-sm font-medium">
-            © 2025 Looplet AI Systems. All rights reserved.
+            © 2025 Aut0 Pilot. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="https://twitter.com/loopletai" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
-            <a href="https://github.com/looplet-ai/looplet-builder" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
+            <a href="https://twitter.com/aut0pilot" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
+            <a href="https://github.com/aut0-pilot/aut0-pilot" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
           </div>
         </div>
       </footer>

@@ -1,5 +1,5 @@
 {
-  "name": "looplet-builder",
+  "name": "aut0-pilot",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "wrangler pages deploy .next --project-name=looplet-builder",
-    "deploy:preview": "wrangler pages deploy .next --project-name=looplet-builder --branch=preview",
+    "deploy": "wrangler pages deploy .next --project-name=aut0-pilot",
+    "deploy:preview": "wrangler pages deploy .next --project-name=aut0-pilot --branch=preview",
     "wrangler:login": "wrangler login"
   },
   "dependencies": {

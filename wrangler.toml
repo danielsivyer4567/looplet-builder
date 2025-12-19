@@ -1,4 +1,4 @@
-name = "looplet-builder"
+name = "aut0-pilot"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 

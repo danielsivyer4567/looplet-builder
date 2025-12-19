@@ -10,7 +10,7 @@ interface EnvConfig {
   NEXT_PUBLIC_SUPABASE_ANON_KEY?: string;
 
   // Optional - API authentication
-  LOOPLET_API_KEY?: string;
+  AUT0_API_KEY?: string;
 
   // Optional - Vercel deployment
   VERCEL_API_TOKEN?: string;
@@ -32,8 +32,8 @@ export function validateEnv(): ValidationResult {
   }
 
   // Optional but recommended
-  if (!process.env.LOOPLET_API_KEY) {
-    warnings.push("LOOPLET_API_KEY not set - API is open to all requests");
+  if (!process.env.AUT0_API_KEY) {
+    warnings.push("AUT0_API_KEY not set - API is open to all requests");
   }
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -74,7 +74,7 @@ export function getEnvConfig(): Partial<EnvConfig> {
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    LOOPLET_API_KEY: process.env.LOOPLET_API_KEY,
+    AUT0_API_KEY: process.env.AUT0_API_KEY,
     VERCEL_API_TOKEN: process.env.VERCEL_API_TOKEN,
   };
 }
@@ -85,7 +85,7 @@ export const features = {
     return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
   },
   get authentication() {
-    return !!process.env.LOOPLET_API_KEY;
+    return !!process.env.AUT0_API_KEY;
   },
   get vercelDeploy() {
     return !!process.env.VERCEL_API_TOKEN;

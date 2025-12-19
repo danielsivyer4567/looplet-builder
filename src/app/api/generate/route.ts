@@ -101,6 +101,6 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     status: "ok",
-    message: "Looplet Builder API - POST a prompt to generate an app",
+    message: "Aut0 Pilot API - POST a prompt to generate an app",
   });
 }

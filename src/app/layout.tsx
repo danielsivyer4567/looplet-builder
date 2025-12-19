@@ -13,18 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Looplet Builder - AI-Powered App Generator",
-  description: "Transform your ideas into fully functional applications in minutes. Looplet Builder uses Claude AI to generate production-ready Next.js apps from natural language prompts.",
-  keywords: ["AI", "app generator", "Next.js", "React", "Claude", "no-code", "low-code"],
-  authors: [{ name: "Looplet AI Systems" }],
+  title: "Aut0 Pilot - AI-Powered App Generator",
+  description: "Transform your ideas into fully functional applications in minutes. Aut0 Pilot uses Claude AI to generate production-ready Next.js apps from natural language prompts.",
+  keywords: ["AI", "app generator", "Next.js", "React", "Claude", "no-code", "low-code", "autopilot"],
+  authors: [{ name: "Aut0 Pilot" }],
   openGraph: {
-    title: "Looplet Builder - AI-Powered App Generator",
+    title: "Aut0 Pilot - AI-Powered App Generator",
     description: "Transform your ideas into fully functional applications in minutes.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Looplet Builder - AI-Powered App Generator",
+    title: "Aut0 Pilot - AI-Powered App Generator",
     description: "Transform your ideas into fully functional applications in minutes.",
   },
 };

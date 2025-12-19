@@ -1,4 +1,4 @@
--- Supabase Schema for Looplet Builder
+-- Supabase Schema for Aut0 Pilot
 -- Run this in your Supabase SQL editor to set up the database
 
 -- Projects table - stores generated applications
