@@ -1,18 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { Loader2, Sparkles, CheckCircle, Download, ExternalLink, Construction, ListTodo, FileText, ShoppingCart } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loader2, Sparkles, CheckCircle, Download, ExternalLink, Construction, ListTodo, FileText, ShoppingCart, AlertCircle, Rocket, Save } from "lucide-react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
-const templates = [
+// Default templates - will be overridden by API if available
+const defaultTemplates = [
   { id: "construction", name: "Construction Dashboard", icon: Construction, prompt: "Build a construction job management dashboard with job tracking, client management, quote generation, and scheduling calendar" },
   { id: "todo", name: "Todo App", icon: ListTodo, prompt: "Build a todo app with categories, due dates, priority levels, and the ability to share lists" },
   { id: "blog", name: "Blog CMS", icon: FileText, prompt: "Build a blog with markdown support, categories, tags, and an admin dashboard" },
   { id: "ecommerce", name: "E-commerce", icon: ShoppingCart, prompt: "Build an e-commerce store with product catalog, shopping cart, and checkout flow" },
 ];
 
+const iconMap: Record<string, typeof Construction> = {
+  Construction,
+  ListTodo,
+  FileText,
+  ShoppingCart,
+};
+
 type GenerationStatus = "idle" | "analyzing" | "planning" | "generating" | "validating" | "complete" | "error";
+type DeployStatus = "idle" | "deploying" | "success" | "error";
 
 interface GenerationResult {
   requirements?: {
@@ -20,6 +29,7 @@ interface GenerationResult {
     description: string;
     features: string[];
   };
+  architecture?: Record<string, unknown>;
   stats?: {
     totalFiles: number;
     components: number;
@@ -32,16 +42,61 @@ interface GenerationResult {
   error?: string;
 }
 
+interface DeployResult {
+  url?: string;
+  error?: string;
+}
+
+interface Template {
+  id: string;
+  name: string;
+  prompt: string;
+  icon: string;
+}
+
 export function PromptBuilder() {
   const [prompt, setPrompt] = useState("");
   const [status, setStatus] = useState<GenerationStatus>("idle");
   const [result, setResult] = useState<GenerationResult | null>(null);
+  const [templates, setTemplates] = useState(defaultTemplates);
+  const [templatesLoading, setTemplatesLoading] = useState(true);
+  const [deployStatus, setDeployStatus] = useState<DeployStatus>("idle");
+  const [deployResult, setDeployResult] = useState<DeployResult | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  // Fetch templates from API
+  useEffect(() => {
+    async function fetchTemplates() {
+      try {
+        const response = await fetch("/api/templates");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.templates && data.templates.length > 0) {
+            // Map API templates to include icon components
+            const mappedTemplates = data.templates.map((t: Template) => ({
+              ...t,
+              icon: iconMap[t.icon] || Construction,
+            }));
+            setTemplates(mappedTemplates);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch templates:", error);
+      } finally {
+        setTemplatesLoading(false);
+      }
+    }
+    fetchTemplates();
+  }, []);
 
   const handleGenerate = async () => {
     if (!prompt.trim() || prompt.length < 10) return;
 
     setStatus("analyzing");
     setResult(null);
+    setDeployStatus("idle");
+    setDeployResult(null);
+    setSaveStatus("idle");
 
     try {
       // Simulate status progression for UX
@@ -110,30 +165,112 @@ ${result.files.map(f => `- ${f.path}`).join('\n')}
     saveAs(content, `${projectName.toLowerCase().replace(/\s+/g, "-")}.zip`);
   };
 
+  const handleDeploy = async () => {
+    if (!result?.files || result.files.length === 0) return;
+
+    setDeployStatus("deploying");
+    setDeployResult(null);
+
+    try {
+      const response = await fetch("/api/deploy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectName: result.requirements?.name || "looplet-app",
+          files: result.files,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "Deployment failed");
+      }
+
+      setDeployResult({ url: data.deployment?.url });
+      setDeployStatus("success");
+    } catch (error) {
+      console.error("Deploy error:", error);
+      setDeployResult({ error: error instanceof Error ? error.message : "Deployment failed" });
+      setDeployStatus("error");
+    }
+  };
+
+  const handleSaveProject = async () => {
+    if (!result?.files || !result.requirements) return;
+
+    setSaveStatus("saving");
+
+    try {
+      const response = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt,
+          name: result.requirements.name,
+          description: result.requirements.description,
+          files: result.files,
+          requirements: result.requirements,
+          architecture: result.architecture,
+          stats: result.stats,
+        }),
+      });
+
+      if (response.status === 503) {
+        // Database not configured - silent fail
+        setSaveStatus("idle");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to save");
+      }
+
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    } catch (error) {
+      console.error("Save error:", error);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    }
+  };
+
   const isGenerating = ["analyzing", "planning", "generating", "validating"].includes(status);
 
   return (
-    <div className="glass rounded-2xl p-8">
+    <div className="glass rounded-2xl p-8 flex flex-col items-center">
       {/* Templates */}
-      <div className="mb-6">
-        <p className="text-sm text-gray-400 mb-3">Quick Start Templates:</p>
+      <div className="mb-6 w-full">
+        <p className="text-sm text-gray-400 mb-3 text-center">Quick Start Templates:</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {templates.map((template) => (
-            <button
-              key={template.id}
-              onClick={() => handleTemplateClick(template.prompt)}
-              disabled={isGenerating}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-500/50 transition-all disabled:opacity-50"
-            >
-              <template.icon className="w-6 h-6 text-blue-400" />
-              <span className="text-xs text-gray-300">{template.name}</span>
-            </button>
-          ))}
+          {templatesLoading ? (
+            // Skeleton loading state
+            <>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div className="w-6 h-6 skeleton rounded" />
+                  <div className="w-16 h-3 skeleton" />
+                </div>
+              ))}
+            </>
+          ) : (
+            templates.map((template) => (
+              <button
+                key={template.id}
+                onClick={() => handleTemplateClick(template.prompt)}
+                disabled={isGenerating}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-500/50 transition-all disabled:opacity-50"
+              >
+                <template.icon className="w-6 h-6 text-blue-400" />
+                <span className="text-xs text-gray-300">{template.name}</span>
+              </button>
+            ))
+          )}
         </div>
       </div>
 
       {/* Prompt Input */}
-      <div className="mb-6">
+      <div className="mb-6 w-full">
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -141,7 +278,7 @@ ${result.files.map(f => `- ${f.path}`).join('\n')}
           disabled={isGenerating}
           className="w-full h-32 p-4 rounded-xl bg-white/5 border border-white/10 focus:border-blue-500/50 focus:outline-none text-white placeholder-gray-500 resize-none disabled:opacity-50"
         />
-        <div className="flex justify-between items-center mt-2">
+        <div className="flex justify-between items-center mt-2 px-2">
           <span className="text-xs text-gray-500">{prompt.length} characters</span>
           <span className="text-xs text-gray-500">Minimum 10 characters</span>
         </div>
@@ -168,7 +305,7 @@ ${result.files.map(f => `- ${f.path}`).join('\n')}
 
       {/* Progress Steps */}
       {isGenerating && (
-        <div className="mt-6 space-y-3">
+        <div className="mt-6 space-y-3 w-full">
           <ProgressStep label="Analyzing prompt" status={getStepStatus("analyzing", status)} />
           <ProgressStep label="Planning architecture" status={getStepStatus("planning", status)} />
           <ProgressStep label="Generating code" status={getStepStatus("generating", status)} />
@@ -178,10 +315,26 @@ ${result.files.map(f => `- ${f.path}`).join('\n')}
 
       {/* Results */}
       {status === "complete" && result && (
-        <div className="mt-6 p-6 rounded-xl bg-green-500/10 border border-green-500/20">
-          <div className="flex items-center gap-2 mb-4">
-            <CheckCircle className="w-5 h-5 text-green-400" />
-            <span className="text-green-400 font-semibold">Generation Complete!</span>
+        <div className="mt-6 p-6 rounded-xl bg-green-500/10 border border-green-500/20 w-full">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-400" />
+              <span className="text-green-400 font-semibold">Generation Complete!</span>
+            </div>
+            <button
+              onClick={handleSaveProject}
+              disabled={saveStatus === "saving"}
+              className="flex items-center gap-1 px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-sm transition-colors disabled:opacity-50"
+            >
+              {saveStatus === "saving" ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : saveStatus === "saved" ? (
+                <CheckCircle className="w-4 h-4 text-green-400" />
+              ) : (
+                <Save className="w-4 h-4" />
+              )}
+              <span>{saveStatus === "saved" ? "Saved!" : "Save"}</span>
+            </button>
           </div>
 
           {result.requirements && (
@@ -216,21 +369,74 @@ ${result.files.map(f => `- ${f.path}`).join('\n')}
               <Download className="w-4 h-4" />
               Download Code
             </button>
-            <button className="flex-1 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium flex items-center justify-center gap-2 transition-colors">
-              <ExternalLink className="w-4 h-4" />
-              Deploy to Vercel
+            <button
+              onClick={handleDeploy}
+              disabled={deployStatus === "deploying"}
+              className="flex-1 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+            >
+              {deployStatus === "deploying" ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Deploying...
+                </>
+              ) : deployStatus === "success" ? (
+                <>
+                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  Deployed!
+                </>
+              ) : (
+                <>
+                  <Rocket className="w-4 h-4" />
+                  Deploy to Vercel
+                </>
+              )}
             </button>
           </div>
+
+          {/* Deploy Result */}
+          {deployStatus === "success" && deployResult?.url && (
+            <div className="mt-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+              <p className="text-sm text-green-400 mb-2">Deployment successful!</p>
+              <a
+                href={deployResult.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm"
+              >
+                <ExternalLink className="w-4 h-4" />
+                {deployResult.url}
+              </a>
+            </div>
+          )}
+
+          {deployStatus === "error" && deployResult?.error && (
+            <div className="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+              <div className="flex items-center gap-2 text-yellow-400 text-sm">
+                <AlertCircle className="w-4 h-4" />
+                <span>{deployResult.error}</span>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Configure VERCEL_API_TOKEN to enable deployment, or download the code and deploy manually.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
       {/* Error */}
       {status === "error" && result?.error && (
-        <div className="mt-6 p-6 rounded-xl bg-red-500/10 border border-red-500/20">
-          <p className="text-red-400">{result.error}</p>
+        <div className="mt-6 p-6 rounded-xl bg-red-500/10 border border-red-500/20 w-full">
+          <div className="flex items-center gap-2 mb-2">
+            <AlertCircle className="w-5 h-5 text-red-400" />
+            <span className="text-red-400 font-medium">Generation Failed</span>
+          </div>
+          <p className="text-red-400/80 text-sm mb-4">{result.error}</p>
           <button
-            onClick={() => setStatus("idle")}
-            className="mt-4 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 transition-colors"
+            onClick={() => {
+              setStatus("idle");
+              setResult(null);
+            }}
+            className="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 transition-colors"
           >
             Try Again
           </button>

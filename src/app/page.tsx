@@ -3,7 +3,7 @@ import { Sparkles, Zap, Code2, Rocket, Shield, Download } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-mesh relative overflow-hidden">
+    <div className="min-h-screen w-auto bg-mesh relative overflow-hidden flex flex-col text-center">
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] animate-float" />
@@ -13,8 +13,8 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between glass-morphism px-6 py-3 rounded-2xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-center">
+        <div className="w-full max-w-7xl flex items-center justify-between glass-morphism px-6 py-3 rounded-2xl">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-lg shadow-blue-500/20 animate-pulse-glow">
               <Sparkles className="w-5 h-5 text-white" />
@@ -26,22 +26,25 @@ export default function Home() {
               <a href="#features" className="text-sm font-medium text-gray-300 hover:text-white transition-all hover:scale-105">Features</a>
               <a href="#demo" className="text-sm font-medium text-gray-300 hover:text-white transition-all hover:scale-105">Demo</a>
             </div>
-            <button className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-all border border-white/10 hover:border-white/20 active:scale-95">
+            <a
+              href="#demo"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm font-semibold transition-all border border-white/10 hover:border-white/20 active:scale-95 scroll-smooth"
+            >
               Get Started
-            </button>
+            </a>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 px-6 pt-40 pb-20 max-w-7xl mx-auto text-center">
+      <section className="relative z-10 px-6 pt-40 pb-20 max-w-7xl mx-auto flex flex-col items-center text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-10 border border-white/5 animate-fadeIn">
           <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
           <span className="text-xs font-semibold tracking-wider uppercase text-blue-400/90">AI-Powered App Generation</span>
         </div>
 
-        <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter animate-fadeIn">
-          <span className="text-white drop-shadow-2xl">From Prompt to</span>
+        <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter animate-fadeIn text-white">
+          <span className="drop-shadow-2xl">From Prompt to</span>
           <br />
           <span className="gradient-text drop-shadow-2xl">Deployed App</span>
         </h1>
@@ -52,7 +55,7 @@ export default function Home() {
         </p>
 
         {/* Hero Stats */}
-        <div className="grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto mb-20 animate-fadeIn" style={{ animationDelay: "0.4s" }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto mb-20 animate-fadeIn w-full" style={{ animationDelay: "0.4s" }}>
           <StatCard label="Avg. Build Time" value="5 min" />
           <StatCard label="Code Ownership" value="100%" />
           <StatCard label="Modern Stack" value="Next.js" />
@@ -60,7 +63,7 @@ export default function Home() {
       </section>
 
       {/* Prompt Builder Area */}
-      <section id="demo" className="relative z-10 px-6 pb-32 max-w-5xl mx-auto animate-fadeIn" style={{ animationDelay: "0.6s" }}>
+      <section id="demo" className="w-full relative z-10 px-6 pb-32 max-w-5xl mx-auto animate-fadeIn" style={{ animationDelay: "0.6s" }}>
         <div className="p-1 rounded-[32px] bg-gradient-to-b from-white/10 to-transparent">
           <div className="glass-morphism rounded-[31px] overflow-hidden">
             <PromptBuilder />
@@ -69,15 +72,15 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="relative z-10 px-6 py-32 max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+      <section id="features" className="w-full relative z-10 px-6 py-32 max-w-7xl mx-auto">
+        <div className="text-center mb-20 flex flex-col items-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Engineered for Performance
           </h2>
           <div className="h-1.5 w-24 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full" />
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <FeatureCard
             icon={<Sparkles className="w-6 h-6" />}
             title="AI-Powered Generation"
@@ -112,8 +115,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 px-6 py-12 glass border-t border-white/5 mt-20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+      <footer className="relative z-10 px-6 py-12 mt-20 max-w-7xl mx-auto w-full">
+        <div className="glass-card border border-white/5 rounded-2xl px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-white/5 border border-white/10">
               <Sparkles className="w-5 h-5 text-blue-400" />
@@ -124,8 +127,8 @@ export default function Home() {
             © 2025 Looplet AI Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
+            <a href="https://twitter.com/loopletai" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
+            <a href="https://github.com/looplet-ai/looplet-builder" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
           </div>
         </div>
       </footer>
@@ -135,7 +138,7 @@ export default function Home() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="glass-card p-6 border border-white/5 hover:border-white/10 transition-all group">
+    <div className="glass-card p-6 border border-white/5 hover:border-white/10 transition-all group text-center">
       <div className="text-3xl font-black text-white mb-1 group-hover:gradient-text transition-all">{value}</div>
       <div className="text-sm font-medium text-gray-500 tracking-wide uppercase">{label}</div>
     </div>
@@ -144,7 +147,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
-    <div className="glass-card p-8 hover-glow group border border-white/5">
+    <div className="glass-card p-8 hover-glow group border border-white/5 text-center flex flex-col items-center">
       <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform border border-white/5">
         {icon}
       </div>
